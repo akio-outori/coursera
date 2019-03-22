@@ -4,9 +4,13 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    public static int[][] Percolation(int n) {
-        int[][] matrix = new int[n][n];
-        return matrix;
+    private boolean[][] matrix;
+    private WeightedQuickUnionUF find;
+    private int size;
+
+    public Percolation(int size) {
+        matrix = new boolean[size][size];
+        find   = new WeightedQuickUnionUF((size * size) + 2);
     }
 
     private static int ParseArgs(String arg) {
@@ -20,18 +24,30 @@ public class Percolation {
         return 0;
     }
 
-    public static void main(String args[]) {
-        // Create an initial matrix
-        int size = ParseArgs(args[0]);
-        int[][] matrix = Percolation.Percolation(size);
-
-        // print the matrix
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
+    private static boolean[][] Visualize(boolean[][] matrix) {
+        for ( int i = 0; i < matrix.length; i++) {
+            for ( int j = 0; j < matrix.length; j++) {
                 System.out.print(matrix[i][j] + " ");
             }
-            System.out.println();
+        System.out.println();
         }
+        return matrix;
+    }
+
+    public static void main(String args[]) {
+
+        // Create an initial matrix
+        int size = ParseArgs(args[0]);
+        Percolation system = new Percolation(size);
+        Visualize(system.matrix);
+
+        // print the matrix
+        //for (int i = 0; i < matrix.length; i++) {
+        //    for (int j = 0; j < matrix[i].length; j++) {
+        //        System.out.print(matrix[i][j] + " ");
+        //    }
+        //    System.out.println();
+        //}
     }
 
 }
