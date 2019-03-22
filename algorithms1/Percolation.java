@@ -9,9 +9,21 @@ public class Percolation {
         return matrix;
     }
 
+    private static int ParseArgs(String arg) {
+        try {
+            int num = Integer.parseInt(arg);
+            return num;
+        } catch (NumberFormatException nfe) {
+            System.out.println("The first argument must be an integer.");
+            System.exit(1);
+        }
+        return 0;
+    }
+
     public static void main(String args[]) {
         // Create an initial matrix
-        int[][] matrix = Percolation.Percolation(20);
+        int size = ParseArgs(args[0]);
+        int[][] matrix = Percolation.Percolation(size);
 
         // print the matrix
         for (int i = 0; i < matrix.length; i++) {
