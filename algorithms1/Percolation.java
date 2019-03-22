@@ -4,13 +4,16 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
+    public static int[][] Percolation(int n) {
+        int[][] matrix = new int[n][n];
+        return matrix;
+    }
+
     public static void main(String args[]) {
         // Create an initial matrix
-        int[][] matrix = new int[20][20];
+        int[][] matrix = Percolation.Percolation(20);
 
         // print the matrix
-        // System.out.println(Arrays.toString(a));
-
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 System.out.print(matrix[i][j] + " ");
