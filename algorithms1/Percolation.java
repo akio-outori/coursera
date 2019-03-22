@@ -4,12 +4,12 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    private boolean[][] matrix;
+    private int[][] matrix;
     private WeightedQuickUnionUF find;
     private int size;
 
     public Percolation(int size) {
-        matrix = new boolean[size][size];
+        matrix = new int[size][size];
         find   = new WeightedQuickUnionUF((size * size) + 2);
     }
 
@@ -24,14 +24,18 @@ public class Percolation {
         return 0;
     }
 
-    private static boolean[][] Visualize(boolean[][] matrix) {
+    private void Visualize(int[][] matrix) {
         for ( int i = 0; i < matrix.length; i++) {
             for ( int j = 0; j < matrix.length; j++) {
                 System.out.print(matrix[i][j] + " ");
             }
         System.out.println();
         }
-        return matrix;
+    }
+
+    public void open(int row, int column) throws IndexOutOfBoundsException {
+        
+        matrix[row][column] = 1;
     }
 
     public static void main(String args[]) {
@@ -39,15 +43,19 @@ public class Percolation {
         // Create an initial matrix
         int size = ParseArgs(args[0]);
         Percolation system = new Percolation(size);
-        Visualize(system.matrix);
 
-        // print the matrix
-        //for (int i = 0; i < matrix.length; i++) {
-        //    for (int j = 0; j < matrix[i].length; j++) {
-        //        System.out.print(matrix[i][j] + " ");
-        //    }
-        //    System.out.println();
-        //}
+        // Test open
+        int row = StdRandom.uniform(size) + 1;
+        int column = StdRandom.uniform(size) + 1;
+        try {
+            system.open(row, column);
+        } catch (IndexOutOfBoundsException error) {
+            System.out.println("Parameter out of bounds:" + " row: " + row + " column: " + column);
+        }
+
+        // View the state of the system
+        system.Visualize(system.matrix);
+
     }
 
 }
