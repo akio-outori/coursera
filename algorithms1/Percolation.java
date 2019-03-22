@@ -34,7 +34,6 @@ public class Percolation {
     }
 
     public void open(int row, int column) throws IndexOutOfBoundsException {
-        
         matrix[row][column] = 1;
     }
 
@@ -45,12 +44,13 @@ public class Percolation {
         Percolation system = new Percolation(size);
 
         // Test open
-        int row = StdRandom.uniform(size) + 1;
+        int row    = StdRandom.uniform(size) + 1;
         int column = StdRandom.uniform(size) + 1;
         try {
             system.open(row, column);
         } catch (IndexOutOfBoundsException error) {
             System.out.println("Parameter out of bounds:" + " row: " + row + " column: " + column);
+            System.exit(1);
         }
 
         // View the state of the system
