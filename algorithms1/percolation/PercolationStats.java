@@ -15,12 +15,10 @@ public class PercolationStats {
 
         // Perform the specified number of experiments
         for (int iteration = 0; iteration < experiments; iteration++) {
-            results[iteration] = Percolation.main(Integer.toString(size), false);
-
-            // Convert returned number of squares to percentages
-            results[iteration] = Double.valueOf(results[iteration]) / Double.valueOf((size*size));
+            Percolation system = new Percolation(size);
+            system.simulate();
+            results[iteration] = Double.valueOf(system.numberOfOpenSites()) / Double.valueOf((size*size));
         }
-
     }
 
     // Take the size of the matrix from command line args

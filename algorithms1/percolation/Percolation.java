@@ -4,34 +4,62 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    public static int size;
+    public int size;
     private int[][] matrix;
     private WeightedQuickUnionUF find;
 
     // Create a data type that instantiates an N*N matrix of size^2
-    public Percolation(int size) {
+    public Percolation(int matrixSize) {
+        size   = matrixSize;
         matrix = new int[size][size];
         find   = new WeightedQuickUnionUF((size * size) + 2);
     }
 
-    // Take the size of the matrix from command line args
-    private static void ParseArgs(String arg) throws NumberFormatException {
-        size = Integer.parseInt(arg);
-    }
-
     // Show the current state of the system as an N*N square
     private void Visualize(int[][] matrix) {
-        for ( int i = 0; i < matrix.length; i++) {
-            for ( int j = 0; j < matrix.length; j++) {
+        for ( int i = 0; i < size; i++) {
+            for ( int j = 0; j < size; j++) {
                 System.out.print(matrix[i][j] + " ");
             }
         System.out.println();
         }
     }
 
+    // Move code from the main method here to run percolation simulation
+    public void simulate() {
+        while (!percolates()) {
+            int row    = StdRandom.uniform(size);
+            int column = StdRandom.uniform(size);
+            try {
+                if (isFull(row, column) == true) {
+                    open(row, column);
+                } else {
+                    continue;
+                }
+            } catch (IndexOutOfBoundsException error) {
+                System.out.println("Parameter out of bounds:" + " row: " + row + " column: " + column);
+                System.out.println(error);
+                System.exit(1);
+            }
+        }
+    }
+
     // Check whether the system percolates
     public boolean percolates() {
-        return find.connected(0, (size*size) - 1);
+        return find.connected(0, (size*size) - 1 );
+    }
+
+    // Count the number of open sites
+    public int numberOfOpenSites() {
+        int count = 0;
+        for ( int row = 0; row < size; row++ ) {
+            for ( int column = 0; column < size; column++ ) {
+                if (isOpen(row, column)) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     // Check if a square is "Open", e.g. if it has been changed from 0 to 1
@@ -101,38 +129,22 @@ public class Percolation {
     }
 
     // Main method
-    public static int main(String arg, boolean visualize) {
+    public static void main(String args[]) {
+
+        // Set the size of the matrix
+        int matrixSize = Integer.parseInt(args[0]);
 
         // Create an initial matrix
-        ParseArgs(arg);
-        Percolation system = new Percolation(size);
+        Percolation system = new Percolation(matrixSize);
 
-        // percolate
-        int openedSquares = 0;
-        while (!system.percolates()) {
-            int row    = StdRandom.uniform(size);
-            int column = StdRandom.uniform(size);
-            try {
-                if (system.isFull(row, column) == true) {
-                    system.open(row, column);
-                } else {
-                    continue;
-                }
-            } catch (IndexOutOfBoundsException error) {
-                System.out.println("Parameter out of bounds:" + " row: " + row + " column: " + column);
-                System.out.println(error);
-                System.exit(1);
-            }
-            openedSquares++;
-        }
+        // Run the percolation simulation
+        system.simulate();
 
         // View the state of the system if asked
-        if (visualize == true) {
-            system.Visualize(system.matrix);
-        }
+        system.Visualize(system.matrix);
 
         // return the number of squares required to percolate
-        return openedSquares;
+        System.out.println(system.numberOfOpenSites());
     }
 
 }
