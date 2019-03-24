@@ -4,11 +4,24 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class PercolationStats {
 
-    private int experiments;
-    private double[] results;
+    private static int size;
+    private Percolation experiment;
+    private static int experiments;
+    private static double[] results;
 
-    public PercolationStats(int n, int trials) {
+    public PercolationStats(int size, int experiments) throws IllegalArgumentException {
 
+        results = new double[size];
+
+        // Perform the specified number of experiments
+        for (int iteration = 0; iteration < experiments; iteration++) {
+            System.out.println(Percolation.main(Integer.toString(size), false));
+        }
+    }
+
+    // Take the size of the matrix from command line args
+    private static int ParseArgs(String arg) throws NumberFormatException {
+        return Integer.parseInt(arg);
     }
 
     public double mean() {
@@ -29,6 +42,11 @@ public class PercolationStats {
 
     public static void main(String[] args) {
 
+        // Get the size of the matrix and the number of runs to perform
+        size        = ParseArgs(args[0]);
+        experiments = ParseArgs(args[1]);
+
+        PercolationStats ps = new PercolationStats(size, experiments);
     }
 
 }

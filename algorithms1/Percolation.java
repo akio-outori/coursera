@@ -101,14 +101,14 @@ public class Percolation {
     }
 
     // Main method
-    public static void main(String args[]) {
+    public static int main(String arg, boolean visualize) {
 
         // Create an initial matrix
-        ParseArgs(args[0]);
+        ParseArgs(arg);
         Percolation system = new Percolation(size);
 
-        // Test open
-        int i = 0;
+        // percolate
+        int openedSquares = 0;
         while (!system.percolates()) {
             int row    = StdRandom.uniform(size);
             int column = StdRandom.uniform(size);
@@ -123,17 +123,16 @@ public class Percolation {
                 System.out.println(error);
                 System.exit(1);
             }
-            i++;
+            openedSquares++;
         }
 
-        // View the state of the system
-        system.Visualize(system.matrix);
+        // View the state of the system if asked
+        if (visualize == true) {
+            system.Visualize(system.matrix);
+        }
 
-        // Test percolation
-        System.out.println("Start: " + system.find.find(0));
-        System.out.println();
-        System.out.println("End: " + system.find.find((size*size) - 1));
-        System.out.println(system.find.connected(0, (size*size) - 1));
+        // return the number of squares required to percolate
+        return openedSquares;
     }
 
 }
