@@ -11,7 +11,7 @@ public class Percolation {
     // Create a data type that instantiates an N*N matrix of size^2
     public Percolation(int size) {
         matrix = new int[size][size];
-        find   = new WeightedQuickUnionUF((size * size));
+        find   = new WeightedQuickUnionUF((size * size) + 2);
     }
 
     // Take the size of the matrix from command line args
@@ -27,6 +27,11 @@ public class Percolation {
             }
         System.out.println();
         }
+    }
+
+    // Check whether the system percolates
+    public boolean percolates() {
+        return find.connected(0, (size*size));
     }
 
     // Check if a square is "Open", e.g. if it has been changed from 0 to 1
@@ -49,8 +54,7 @@ public class Percolation {
 
     // Convert from the matrix notation to the union find notation for a square
     public int convert(int row, int column) {
-        //System.out.println("Row: " + row + " Size: " + size + " Column: " + column + " Result: " + ((row * size) + column));
-        return (column * size) + row;
+        return (column * size) + row + 1;
     }
 
     // Set the value of a given square to 1, e.g. open it
@@ -59,37 +63,41 @@ public class Percolation {
         // Update matrix value
         matrix[row][column] = 1;
 
-        System.out.println("Value: " + convert(row, column));
-
-        // Left / Right
-        if ( column == 0 ) {
-            System.out.print("Right: ");
-            System.out.println(convert((row + 1), column));
-        } else if ( column == size ) {
-            System.out.print("Left: ");
-            System.out.println(convert((row - 1), column));
-        } else if ( row - 1 >= 0 && row + 1 <= size ) {
-            System.out.print("Left: ");
-            System.out.println(convert((row - 1), column));
-            System.out.print("Right: ");
-            System.out.println(convert((row + 1), column));
-        }
-
-        // Up / Down
+        // Connect all first and last row squares
         if ( row == 0 ) {
-            System.out.print("Down: ");
-            System.out.println(convert(row, (column + 1)));
-        } else if ( row == size ) {
-            System.out.print("Up: ");
-            System.out.println(convert(row, (column - 1)));
-        } else if ( column - 1 >= 0 && column + 1 <= size ) {
-            System.out.print("Up: ");
-            System.out.println(convert(row, (column - 1)));
-            System.out.print("Down: ");
-            System.out.println(convert(row, (column + 1)));
+            find.union(0, convert(row, column));
+        } else if ( row == size - 1) {
+            find.union(size, convert(row, column));
         }
 
-        find.union(0, convert(row, column));
+        // Connect Down
+        if ( row - 1 >= 0 ) {
+            if (isOpen(row - 1, column)) {
+                find.union(convert(row - 1, column), convert(row, column));
+            }
+        }
+
+        // Connect Up
+        if ( row + 1 <= size - 1 ) {
+            if (isOpen(row + 1, column)) {
+                find.union(convert(row + 1, column), convert(row, column));
+            }
+        }
+
+        // Connect Left
+        if ( column - 1 >= 0 ) {
+            if (isOpen(row, column - 1)) {
+                find.union(convert(row, column - 1), convert(row, column));
+            }
+        }
+
+        // Connect Right
+        if ( column + 1 <= size - 1 ) {
+            if (isOpen(row, column + 1)) {
+                find.union(convert(row, column + 1), convert(row, column));
+            }
+        }
+
     }
 
     // Main method
@@ -99,10 +107,9 @@ public class Percolation {
         ParseArgs(args[0]);
         Percolation system = new Percolation(size);
 
-        System.out.println(size);
         // Test open
         int i = 0;
-        while (i < 400) {
+        while (!system.percolates()) {
             int row    = StdRandom.uniform(size);
             int column = StdRandom.uniform(size);
             try {
@@ -124,8 +131,8 @@ public class Percolation {
 
         // Test percolation
         System.out.println("Start: " + system.find.find(0));
+        System.out.println();
         System.out.println("End: " + system.find.find((size*size) - 1));
-        System.out.println(system.find.count());
         System.out.println(system.find.connected(0, (size*size) - 1));
     }
 
