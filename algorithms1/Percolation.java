@@ -4,26 +4,19 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
+    public static int size;
     private int[][] matrix;
     private WeightedQuickUnionUF find;
-    private int size;
 
     // Create a data type that instantiates an N*N matrix of size^2
     public Percolation(int size) {
         matrix = new int[size][size];
-        find   = new WeightedQuickUnionUF((size * size) + 2);
+        find   = new WeightedQuickUnionUF((size * size));
     }
 
     // Take the size of the matrix from command line args
-    private static int ParseArgs(String arg) {
-        try {
-            int num = Integer.parseInt(arg);
-            return num;
-        } catch (NumberFormatException nfe) {
-            System.out.println("The first argument must be an integer.");
-            System.exit(1);
-        }
-        return 0;
+    private static void ParseArgs(String arg) throws NumberFormatException {
+        size = Integer.parseInt(arg);
     }
 
     // Show the current state of the system as an N*N square
@@ -54,21 +47,62 @@ public class Percolation {
         }
     }
 
+    // Convert from the matrix notation to the union find notation for a square
+    public int convert(int row, int column) {
+        //System.out.println("Row: " + row + " Size: " + size + " Column: " + column + " Result: " + ((row * size) + column));
+        return (column * size) + row;
+    }
+
     // Set the value of a given square to 1, e.g. open it
     public void open(int row, int column) throws IndexOutOfBoundsException {
+
+        // Update matrix value
         matrix[row][column] = 1;
+
+        System.out.println("Value: " + convert(row, column));
+
+        // Left / Right
+        if ( column == 0 ) {
+            System.out.print("Right: ");
+            System.out.println(convert((row + 1), column));
+        } else if ( column == size ) {
+            System.out.print("Left: ");
+            System.out.println(convert((row - 1), column));
+        } else if ( row - 1 >= 0 && row + 1 <= size ) {
+            System.out.print("Left: ");
+            System.out.println(convert((row - 1), column));
+            System.out.print("Right: ");
+            System.out.println(convert((row + 1), column));
+        }
+
+        // Up / Down
+        if ( row == 0 ) {
+            System.out.print("Down: ");
+            System.out.println(convert(row, (column + 1)));
+        } else if ( row == size ) {
+            System.out.print("Up: ");
+            System.out.println(convert(row, (column - 1)));
+        } else if ( column - 1 >= 0 && column + 1 <= size ) {
+            System.out.print("Up: ");
+            System.out.println(convert(row, (column - 1)));
+            System.out.print("Down: ");
+            System.out.println(convert(row, (column + 1)));
+        }
+
+        find.union(0, convert(row, column));
     }
 
     // Main method
     public static void main(String args[]) {
 
         // Create an initial matrix
-        int size = ParseArgs(args[0]);
+        ParseArgs(args[0]);
         Percolation system = new Percolation(size);
 
+        System.out.println(size);
         // Test open
         int i = 0;
-        while (i < 100) {
+        while (i < 400) {
             int row    = StdRandom.uniform(size);
             int column = StdRandom.uniform(size);
             try {
@@ -88,6 +122,11 @@ public class Percolation {
         // View the state of the system
         system.Visualize(system.matrix);
 
+        // Test percolation
+        System.out.println("Start: " + system.find.find(0));
+        System.out.println("End: " + system.find.find((size*size) - 1));
+        System.out.println(system.find.count());
+        System.out.println(system.find.connected(0, (size*size) - 1));
     }
 
 }
