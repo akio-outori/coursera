@@ -11,12 +11,16 @@ public class PercolationStats {
 
     public PercolationStats(int size, int experiments) throws IllegalArgumentException {
 
-        results = new double[size];
+        results = new double[experiments];
 
         // Perform the specified number of experiments
         for (int iteration = 0; iteration < experiments; iteration++) {
-            System.out.println(Percolation.main(Integer.toString(size), false));
+            results[iteration] = Percolation.main(Integer.toString(size), false);
+
+            // Convert returned number of squares to percentages
+            results[iteration] = Double.valueOf(results[iteration]) / Double.valueOf((size*size));
         }
+
     }
 
     // Take the size of the matrix from command line args
@@ -47,6 +51,11 @@ public class PercolationStats {
         experiments = ParseArgs(args[1]);
 
         PercolationStats ps = new PercolationStats(size, experiments);
+        String confidence95 = ps.confidenceLo() + ", " + ps.confidenceHi();
+
+        System.out.println("mean                    = " + ps.mean());
+        System.out.println("stddev                  = " + ps.stddev());
+        System.out.println("95% confidence interval = " + confidence95);
     }
 
 }
