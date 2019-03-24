@@ -31,7 +31,7 @@ public class Percolation {
 
     // Check whether the system percolates
     public boolean percolates() {
-        return find.connected(0, (size*size));
+        return find.connected(0, (size*size) - 1);
     }
 
     // Check if a square is "Open", e.g. if it has been changed from 0 to 1
@@ -67,7 +67,7 @@ public class Percolation {
         if ( row == 0 ) {
             find.union(0, convert(row, column));
         } else if ( row == size - 1) {
-            find.union(size, convert(row, column));
+            find.union(((size*size) - 1), convert(row, column));
         }
 
         // Connect Down
