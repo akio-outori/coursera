@@ -49,11 +49,11 @@ public class PercolationStats {
     }
 
     public double confidenceLo() {
-        return mean() - ((1.96 * stddev) / Math.sqrt(experiments));
+        return mean - ((1.96 * stddev) / Math.sqrt(experiments));
     }
 
     public double confidenceHi() {
-        return mean() + ((1.96 * stddev) / Math.sqrt(experiments));
+        return mean + ((1.96 * stddev) / Math.sqrt(experiments));
     }
 
     public static void main(String[] args) {

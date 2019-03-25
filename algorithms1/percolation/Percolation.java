@@ -24,7 +24,7 @@ public class Percolation {
 
     // Check whether the system percolates
     public boolean percolates() {
-        return find.connected(0, (size*size) - 1);
+        return find.connected(0, (size*size) + 1);
     }
 
     // Count the number of open sites
@@ -122,41 +122,33 @@ public class Percolation {
 
         // Connect all Last Row squares
         if (row == size) {
-            find.union((size*size) - 1, convert(row, column));
+            find.union((size*size) + 1, convert(row, column));
         }
 
         // Connect Up
         if (row - 1 > 0) {
-            if (isFull(row - 1, column)) {
-                find.union(0, convert(row, column));
-            } else if (isOpen(row - 1, column)) {
+            if (isOpen(row - 1, column)) {
                 find.union(convert(row - 1, column), convert(row, column));
             }
         }
 
         // Connect Down
         if (row + 1 <= size) {
-            if (isFull(row + 1, column)) {
-                find.union(0, convert(row, column));
-            } else if (isOpen(row + 1, column)) {
+            if (isOpen(row + 1, column)) {
                 find.union(convert(row + 1, column), convert(row, column));
             }
         }
 
         // Connect Left
         if (column - 1 >= 1) {
-            if (isFull(row, column -1 )) {
-                find.union(0, convert(row, column));
-            } else if (isOpen(row, column - 1)) {
+            if (isOpen(row, column - 1)) {
                 find.union(convert(row, column - 1), convert(row, column));
             }
         }
 
         // Connect Right
         if (column + 1 <= size) {
-            if (isFull(row, column + 1)) {
-                find.union(0, convert(row, column));
-            } else if (isOpen(row, column + 1)) {
+            if (isOpen(row, column + 1)) {
                 find.union(convert(row, column + 1), convert(row, column));
             }
         }
