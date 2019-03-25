@@ -30,8 +30,8 @@ public class Percolation {
     // Count the number of open sites
     public int numberOfOpenSites() {
         int count = 0;
-        for (int row = 1; row < size; row++) {
-            for (int column = 1; column < size; column++) {
+        for (int row = 1; row <= size; row++) {
+            for (int column = 1; column <= size; column++) {
                 if (isOpen(row, column)) {
                     count++;
                 }
@@ -42,11 +42,9 @@ public class Percolation {
 
     // Check if a square is "Open", e.g. if it has been changed from 0 to 1
     public boolean isOpen(int row, int column) {
-
         if (!inRange(row, column)) {
             throw new IllegalArgumentException("Illegal parameter value - Row: " + row + " Column: " + column);
         }
-
         return matrix[row - 1][column - 1] == 1;
     }
 
@@ -173,7 +171,11 @@ public class Percolation {
     }
 
     private boolean inRange(int row, int column) {
-        return (row > 0 || row <= size || column > 0 || column <= size);
+        if (row > 0 && row <= size && column > 0 && column <= size) {
+          return true;
+        } else {
+          return false;
+        }
     }
 
     // Take the size of the matrix from command line args
