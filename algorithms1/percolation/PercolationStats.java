@@ -3,6 +3,10 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 
+    final private int size;
+    final private int experiments;
+    final private double[] results;
+
     public PercolationStats(int matrixSize, int numExperiments) {
 
         size        = matrixSize;
@@ -52,10 +56,6 @@ public class PercolationStats {
         System.out.println("stddev                  = " + ps.stddev());
         System.out.println("95% confidence interval = " + confidence95);
     }
-
-    final private int size;
-    final private int experiments;
-    final private double[] results;
 
     // Take the size of the matrix from command line args
     private static int parseArgs(String arg) {

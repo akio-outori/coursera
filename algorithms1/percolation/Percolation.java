@@ -3,6 +3,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
+    final private int size;
+    final private WeightedQuickUnionUF find;
+    private int[][] matrix;
+
     // Create a data type that instantiates an N*N matrix of size^2
     public Percolation(int matrixSize) {
 
@@ -39,7 +43,7 @@ public class Percolation {
     // Check if a square is "Open", e.g. if it has been changed from 0 to 1
     public boolean isOpen(int row, int column) {
 
-        if (row <= 0 || row > size || column <= 0 || column > size) {
+        if (!inRange(row, column)) {
             throw new IllegalArgumentException("Illegal parameter value - Row: " + row + " Column: " + column);
         }
 
@@ -49,7 +53,7 @@ public class Percolation {
     // Check if a square is "Closed", e.g. if its value is 0
     public boolean isFull(int row, int column) {
 
-        if (row <= 0 || row > size || column <= 0 || column > size) {
+        if ((!inRange(row, column))) {
             throw new IllegalArgumentException("Illegal parameter value - Row: " + row + " Column: " + column);
         }
 
@@ -59,18 +63,16 @@ public class Percolation {
     // Set the value of a given square to 1, e.g. open it
     public void open(int row, int column) {
 
-        if (row <= 0 || row > size || column <= 0 || column > size) {
+        if (!inRange(row, column)) {
             throw new IllegalArgumentException("Illegal parameter value - Row: " + row + " Column: " + column);
         }
 
         // Update matrix value
         matrix[row - 1][column - 1] = 1;
 
-        // Connect all first and last row squares
+        // Connect all first row squares
         if (row == 1) {
             find.union(0, convert(row, column));
-        } else if (row == size) {
-            find.union(((size*size) - 1), convert(row, column));
         }
 
         // Connect Up
@@ -122,10 +124,6 @@ public class Percolation {
         System.out.println(system.numberOfOpenSites());
     }
 
-    final private int size;
-    final private WeightedQuickUnionUF find;
-    private int[][] matrix;
-
     // Show the current state of the system as an N*N square
     private void visualize(int[][] matrix) {
         for (int i = 0; i < size; i++) {
@@ -152,6 +150,10 @@ public class Percolation {
     // Convert from the matrix notation to the union find notation for a square
     private int convert(int row, int column) {
         return ((column - 1) * size) + (row - 1);
+    }
+
+    private boolean inRange(int row, int column) {
+        return row <= 0 || row > size || column <= 0 || column > size;
     }
 
     // Take the size of the matrix from command line args
