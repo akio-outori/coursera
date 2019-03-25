@@ -169,7 +169,7 @@ public class Percolation {
 
     // Convert from the matrix notation to the union find notation for a square
     private int convert(int row, int column) {
-        return ((column - 1) * size) + (row - 1);
+        return ((row - 1) * size) + column;
     }
 
     private boolean inRange(int row, int column) {
