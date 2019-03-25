@@ -53,7 +53,7 @@ public class Percolation {
     // Check if a square is "Closed", e.g. if its value is 0
     public boolean isFull(int row, int column) {
 
-        if ((!inRange(row, column))) {
+        if (!inRange(row, column)) {
             throw new IllegalArgumentException("Illegal parameter value - Row: " + row + " Column: " + column);
         }
 
@@ -70,38 +70,8 @@ public class Percolation {
         // Update matrix value
         matrix[row - 1][column - 1] = 1;
 
-        // Connect all first row squares
-        if (row == 1) {
-            find.union(0, convert(row, column));
-        }
-
-        // Connect Up
-        if (row - 1 >= 1) {
-            if (isOpen(row - 1, column)) {
-                find.union(convert(row - 1, column), convert(row, column));
-            }
-        }
-
-        // Connect Down
-        if (row + 1 <= size) {
-            if (isOpen(row + 1, column)) {
-                find.union(convert(row + 1, column), convert(row, column));
-            }
-        }
-
-        // Connect Left
-        if (column - 1 >= 1) {
-            if (isOpen(row, column - 1)) {
-                find.union(convert(row, column - 1), convert(row, column));
-            }
-        }
-
-        // Connect Right
-        if (column + 1 <= size) {
-            if (isOpen(row, column + 1)) {
-                find.union(convert(row, column + 1), convert(row, column));
-            }
-        }
+        // Connect to the rest of the system
+        connect(row, column);
 
     }
 
@@ -147,13 +117,63 @@ public class Percolation {
         }
     }
 
+    private void connect(int row, int column) {
+
+        // Connect all first row squares
+        if (row == 1) {
+            find.union(0, convert(row, column));
+        }
+
+        // Connect all Last Row squares
+        if (row == size) {
+            find.union((size*size) - 1, convert(row, column));
+        }
+
+        // Connect Up
+        if (row - 1 > 0) {
+            if (isFull(row - 1, column)) {
+                find.union(0, convert(row, column));
+            } else if (isOpen(row - 1, column)) {
+                find.union(convert(row - 1, column), convert(row, column));
+            }
+        }
+
+        // Connect Down
+        if (row + 1 <= size) {
+            if (isFull(row + 1, column)) {
+                find.union(0, convert(row, column));
+            } else if (isOpen(row + 1, column)) {
+                find.union(convert(row + 1, column), convert(row, column));
+            }
+        }
+
+        // Connect Left
+        if (column - 1 >= 1) {
+            if (isFull(row, column -1 )) {
+                find.union(0, convert(row, column));
+            } else if (isOpen(row, column - 1)) {
+                find.union(convert(row, column - 1), convert(row, column));
+            }
+        }
+
+        // Connect Right
+        if (column + 1 <= size) {
+            if (isFull(row, column + 1)) {
+                find.union(0, convert(row, column));
+            } else if (isOpen(row, column + 1)) {
+                find.union(convert(row, column + 1), convert(row, column));
+            }
+        }
+
+    }
+
     // Convert from the matrix notation to the union find notation for a square
     private int convert(int row, int column) {
         return ((column - 1) * size) + (row - 1);
     }
 
     private boolean inRange(int row, int column) {
-        return row <= 0 || row > size || column <= 0 || column > size;
+        return (row > 0 || row <= size || column > 0 || column <= size);
     }
 
     // Take the size of the matrix from command line args

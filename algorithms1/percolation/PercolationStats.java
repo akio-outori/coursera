@@ -20,7 +20,7 @@ public class PercolationStats {
             while (!system.percolates()) {
                 int row    = (StdRandom.uniform(size) + 1);
                 int column = (StdRandom.uniform(size) + 1);
-                if (!system.isOpen(row, column)) {
+                if (!system.isFull(row, column)) {
                     system.open(row, column);
                 } else {
                     continue;
