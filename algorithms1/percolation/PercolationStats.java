@@ -6,8 +6,14 @@ public class PercolationStats {
     final private int size;
     final private int experiments;
     final private double[] results;
+    final private double mean;
+    final private double stddev;
 
     public PercolationStats(int matrixSize, int numExperiments) {
+
+        if (matrixSize <= 0) {
+            throw new IllegalArgumentException("Illegal parameter value - Size: " + matrixSize);
+        }
 
         size        = matrixSize;
         experiments = numExperiments;
@@ -28,6 +34,10 @@ public class PercolationStats {
             }
             results[iteration] = Double.valueOf(system.numberOfOpenSites()) / Double.valueOf((size*size));
         }
+
+        // Calculate results
+        mean   = mean();
+        stddev = stddev();
     }
 
     public double mean() {
@@ -39,11 +49,11 @@ public class PercolationStats {
     }
 
     public double confidenceLo() {
-        return mean() - ((1.96 * stddev()) / Math.sqrt(experiments));
+        return mean() - ((1.96 * stddev) / Math.sqrt(experiments));
     }
 
     public double confidenceHi() {
-        return mean() + ((1.96 * stddev()) / Math.sqrt(experiments));
+        return mean() + ((1.96 * stddev) / Math.sqrt(experiments));
     }
 
     public static void main(String[] args) {
@@ -52,8 +62,8 @@ public class PercolationStats {
         PercolationStats ps = new PercolationStats(parseArgs(args[0]), parseArgs(args[1]));
         String confidence95 = ps.confidenceLo() + ", " + ps.confidenceHi();
 
-        System.out.println("mean                    = " + ps.mean());
-        System.out.println("stddev                  = " + ps.stddev());
+        System.out.println("mean                    = " + ps.mean);
+        System.out.println("stddev                  = " + ps.stddev);
         System.out.println("95% confidence interval = " + confidence95);
     }
 

@@ -50,11 +50,9 @@ public class Percolation {
 
     // Check if a square is "Closed", e.g. if its value is 0
     public boolean isFull(int row, int column) {
-
         if (!inRange(row, column)) {
             throw new IllegalArgumentException("Illegal parameter value - Row: " + row + " Column: " + column);
         }
-
         return find.connected(0, convert(row, column));
     }
 
@@ -171,11 +169,7 @@ public class Percolation {
     }
 
     private boolean inRange(int row, int column) {
-        if (row > 0 && row <= size && column > 0 && column <= size) {
-          return true;
-        } else {
-          return false;
-        }
+        return row > 0 && row <= size && column > 0 && column <= size;
     }
 
     // Take the size of the matrix from command line args
