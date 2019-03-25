@@ -4,26 +4,29 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class PercolationStats {
 
-    private static int size;
-    private Percolation experiment;
-    private static int experiments;
-    private static double[] results;
+    final private int experiments;
+    final private double[] results;
 
-    public PercolationStats(int size, int experiments) throws IllegalArgumentException {
+    public PercolationStats(int size, int number) {
 
-        results = new double[experiments];
+        experiments = number;
+        results     = new double[experiments];
 
         // Perform the specified number of experiments
         for (int iteration = 0; iteration < experiments; iteration++) {
             Percolation system = new Percolation(size);
-            system.simulate();
+
+            while (!system.percolates()) {
+                int row    = (StdRandom.uniform(size) + 1);
+                int column = (StdRandom.uniform(size) + 1);
+                if (system.isFull(row, column) == true) {
+                    system.open(row, column);
+                } else {
+                    continue;
+                }
+            }
             results[iteration] = Double.valueOf(system.numberOfOpenSites()) / Double.valueOf((size*size));
         }
-    }
-
-    // Take the size of the matrix from command line args
-    private static int ParseArgs(String arg) throws NumberFormatException {
-        return Integer.parseInt(arg);
     }
 
     public double mean() {
@@ -45,15 +48,17 @@ public class PercolationStats {
     public static void main(String[] args) {
 
         // Get the size of the matrix and the number of runs to perform
-        size        = ParseArgs(args[0]);
-        experiments = ParseArgs(args[1]);
-
-        PercolationStats ps = new PercolationStats(size, experiments);
+        PercolationStats ps = new PercolationStats(parseArgs(args[0]), parseArgs(args[1]));
         String confidence95 = ps.confidenceLo() + ", " + ps.confidenceHi();
 
         System.out.println("mean                    = " + ps.mean());
         System.out.println("stddev                  = " + ps.stddev());
         System.out.println("95% confidence interval = " + confidence95);
+    }
+
+    // Take the size of the matrix from command line args
+    private static int parseArgs(String arg) {
+        return Integer.parseInt(arg);
     }
 
 }
