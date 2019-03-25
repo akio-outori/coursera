@@ -3,12 +3,13 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    final private int size;
-    final private WeightedQuickUnionUF find;
-    private int[][] matrix;
-
     // Create a data type that instantiates an N*N matrix of size^2
     public Percolation(int matrixSize) {
+
+        // Make sure the environment is sane, no negatives
+        if (matrixSize <= 0) {
+            throw new IllegalArgumentException("Illegal parameter value - Size: " + matrixSize);
+        }
 
         // Declare data structures
         size   = matrixSize;
@@ -39,35 +40,27 @@ public class Percolation {
     public boolean isOpen(int row, int column) {
 
         if (row <= 0 || row > size || column <= 0 || column > size) {
-            throw new IndexOutOfBoundsException("Illegal parameter value - Row: " + row + " Column: " + column);
+            throw new IllegalArgumentException("Illegal parameter value - Row: " + row + " Column: " + column);
         }
 
-        if (matrix[row - 1][column - 1] == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return matrix[row - 1][column - 1] == 1;
     }
 
     // Check if a square is "Closed", e.g. if its value is 0
     public boolean isFull(int row, int column) {
 
         if (row <= 0 || row > size || column <= 0 || column > size) {
-            throw new IndexOutOfBoundsException("Illegal parameter value - Row: " + row + " Column: " + column);
+            throw new IllegalArgumentException("Illegal parameter value - Row: " + row + " Column: " + column);
         }
 
-        if (matrix[row - 1][column - 1] == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return find.connected(0, convert(row, column));
     }
 
     // Set the value of a given square to 1, e.g. open it
     public void open(int row, int column) {
 
         if (row <= 0 || row > size || column <= 0 || column > size) {
-            throw new IndexOutOfBoundsException("Illegal parameter value - Row: " + row + " Column: " + column);
+            throw new IllegalArgumentException("Illegal parameter value - Row: " + row + " Column: " + column);
         }
 
         // Update matrix value
@@ -111,7 +104,7 @@ public class Percolation {
     }
 
     // Main method
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         // Set the size of the matrix
         int matrixSize = parseArgs(args[0]);
@@ -129,6 +122,10 @@ public class Percolation {
         System.out.println(system.numberOfOpenSites());
     }
 
+    final private int size;
+    final private WeightedQuickUnionUF find;
+    private int[][] matrix;
+
     // Show the current state of the system as an N*N square
     private void visualize(int[][] matrix) {
         for (int i = 0; i < size; i++) {
@@ -144,7 +141,7 @@ public class Percolation {
         while (!percolates()) {
             int row    = (StdRandom.uniform(size) + 1);
             int column = (StdRandom.uniform(size) + 1);
-            if (isFull(row, column) == true) {
+            if (!isOpen(row, column)) {
                 open(row, column);
             } else {
                 continue;

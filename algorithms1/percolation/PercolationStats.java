@@ -1,15 +1,12 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class PercolationStats {
 
-    final private int experiments;
-    final private double[] results;
+    public PercolationStats(int matrixSize, int numExperiments) {
 
-    public PercolationStats(int size, int number) {
-
-        experiments = number;
+        size        = matrixSize;
+        experiments = numExperiments;
         results     = new double[experiments];
 
         // Perform the specified number of experiments
@@ -19,7 +16,7 @@ public class PercolationStats {
             while (!system.percolates()) {
                 int row    = (StdRandom.uniform(size) + 1);
                 int column = (StdRandom.uniform(size) + 1);
-                if (system.isFull(row, column) == true) {
+                if (!system.isOpen(row, column)) {
                     system.open(row, column);
                 } else {
                     continue;
@@ -55,6 +52,10 @@ public class PercolationStats {
         System.out.println("stddev                  = " + ps.stddev());
         System.out.println("95% confidence interval = " + confidence95);
     }
+
+    final private int size;
+    final private int experiments;
+    final private double[] results;
 
     // Take the size of the matrix from command line args
     private static int parseArgs(String arg) {
