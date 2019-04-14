@@ -48,6 +48,7 @@ public class Deque<Item> implements Iterable<Item> {
         last = new Node<Item>();
         last.item = item;
         last.next = null;
+        last.previous = oldlast;
         if (isEmpty()) first = last;
         else oldlast.next = last;
         size++;
@@ -93,13 +94,15 @@ public class Deque<Item> implements Iterable<Item> {
         System.out.println(queue.size() + " left on queue");
 
         // Test remove
-        System.out.println(queue.removeFirst());
-        System.out.println(queue.printDeque());
-        System.out.println(queue.size() + " left on queue");
+        while (queue.size > 0) {
+            System.out.println(queue.removeFirst());
+            System.out.println(queue.printDeque());
+            System.out.println(queue.size() + " left on queue");
 
-        System.out.println(queue.removeLast());
-        System.out.println(queue.printDeque());
-        System.out.println(queue.size() + " left on queue");
+            System.out.println(queue.removeLast());
+            System.out.println(queue.printDeque());
+            System.out.println(queue.size() + " left on queue");
+        }
     }
 
     private String printDeque() {
