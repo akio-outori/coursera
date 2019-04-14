@@ -6,13 +6,13 @@ all:
 
 compile:
 	javac Deque.java
-	javac RandomizedQueue.java
-	javac Permutation.java
+#	javac RandomizedQueue.java
+#	javac Permutation.java
 
 run: compile
 	java Deque
-	java RandomizedQueue
-	java Permutation
+#	java RandomizedQueue
+#	java Permutation
 
 clean:
 	find . -type f -not -name Deque.java -not -name RandomizedQueue.java -not -name Permutation.java -not -name Makefile -delete
