@@ -22,7 +22,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // is the deque empty?
     public boolean isEmpty() {
-        return first == null;
+        return size == 0;
     }
 
     // return the number of items on the deque
@@ -37,8 +37,7 @@ public class Deque<Item> implements Iterable<Item> {
         first = new Node<Item>();
         first.item = item;
         first.next = oldfirst;
-        if (isEmpty()) first = first;
-        else oldfirst.previous = first;
+        if (isEmpty()) last = first;
         size++;
     }
 
@@ -84,6 +83,7 @@ public class Deque<Item> implements Iterable<Item> {
         Deque<Integer> queue = new Deque<Integer>();
 
         // Test add
+        queue.addFirst(6);
         queue.addLast(1);
         queue.addLast(2);
         queue.addLast(3);
