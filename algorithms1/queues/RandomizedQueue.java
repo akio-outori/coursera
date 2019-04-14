@@ -37,6 +37,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         int index = randomIndex();
         Item item = random[index];
         random[index] = null;
+        size--;
 
         // Resize when the queue is less than 1/4 full
         if (size > 0 && size < random.length / 4) resize(random.length / 2);
@@ -56,6 +57,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (optional)
     public static void main(String[] args) {
+        RandomizedQueue<String> queue = new RandomizedQueue<String>();
+        queue.enqueue("this");
+        queue.enqueue("is");
+        queue.enqueue("a");
+        queue.enqueue("test");
+        queue.enqueue("case");
+
+        while(queue.size > 0) System.out.println(queue.dequeue());
     }
 
     // Resize array
