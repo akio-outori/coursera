@@ -35,8 +35,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (isEmpty()) throw new NoSuchElementException();
 
         int index = randomIndex();
-        Item item = random[index];
-        random[index] = null;
+        int end   = size - 1;
+
+        Item item     = random[index];
+        random[index] = random[end];
+        random[end]   = null;
         size--;
 
         // Resize when the queue is less than 1/4 full
